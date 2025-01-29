@@ -489,7 +489,7 @@ public final class MessageBuilder implements StatTextFormatter {
                 topList.append(space())
                         .append(componentFactory.rankNumber(++count))
                         .append(space())
-                        .append(componentFactory.playerName(playerName + ":", Target.TOP))
+                        .append(componentFactory.playerName(playerName + " §8-", Target.TOP))
                         .append(space()).append(getStatNumberComponent(topStats.get(playerName), Target.TOP, statistic));
             }
         }
@@ -498,7 +498,7 @@ public final class MessageBuilder implements StatTextFormatter {
 
     private @NotNull TextComponent getTopStatLineComponent(int positionInTopList, String playerName, TextComponent statNumberComponent) {
         boolean useDots = config.useDots();
-        String fullPlayerName = useDots ? playerName : playerName + ":";
+        String fullPlayerName = useDots ? playerName : playerName + " §8-";
 
         TextComponent.Builder topStatLineBuilder = Component.text()
                 .append(space())

@@ -101,7 +101,7 @@ public final class NumberFormatter implements StatNumberFormatter {
 
             //We did not have enough leftover to fill a unit
             else{
-                if(output.toString().length() != 0){
+                if(!output.toString().isEmpty()){
                     output.append(" 0").append(currUnit.getShortLabel());
                 }
                 currUnit = currUnit.getSmallerUnit(1);
@@ -112,7 +112,7 @@ public final class NumberFormatter implements StatNumberFormatter {
             leftoverSeconds = leftoverSeconds - (int)(amount * currUnit.getSeconds());
 
             //Append new values
-            if(output.toString().length() != 0){
+            if(!output.toString().isEmpty()){
                 output.append(" ");
             }
             output.append(amount).append(currUnit.getShortLabel());

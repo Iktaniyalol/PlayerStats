@@ -136,10 +136,10 @@ public enum Unit {
     /** Converts the current Unit into a short label (and returns a '?' if the current Unit is not of Type TIME)*/
     public char getShortLabel(){
         return switch (this) {
-            case DAY -> 'd';
-            case HOUR -> 'h';
-            case MINUTE -> 'm';
-            case SECOND -> 's';
+            case DAY -> 'д';
+            case HOUR -> 'ч';
+            case MINUTE -> 'м';
+            case SECOND -> 'с';
             default -> '?';
         };
     }
