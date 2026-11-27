@@ -13,17 +13,12 @@ import com.artemis.the.gr8.playerstats.core.listeners.JoinListener;
 import com.artemis.the.gr8.playerstats.core.msg.msgutils.LanguageKeyHandler;
 import com.artemis.the.gr8.playerstats.core.sharing.ShareManager;
 import com.artemis.the.gr8.playerstats.core.statistic.StatRequestManager;
-import com.artemis.the.gr8.playerstats.core.utils.Closable;
-import com.artemis.the.gr8.playerstats.core.utils.OfflinePlayerHandler;
-import com.artemis.the.gr8.playerstats.core.utils.Reloadable;
+import com.artemis.the.gr8.playerstats.core.utils.*;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +50,7 @@ public final class Main extends JavaPlugin implements PlayerStats {
         setupMetrics();
 
         //register the listener
-        Bukkit.getPluginManager().registerEvents(new JoinListener(threadManager), this);
+        Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         
         //finish up
         this.getLogger().info("Enabled PlayerStats!");
@@ -151,23 +146,21 @@ public final class Main extends JavaPlugin implements PlayerStats {
      * Setup bstats
      */
     private void setupMetrics() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                final Metrics metrics = new Metrics(pluginInstance, 15923);
-                final boolean placeholderExpansionActive;
-                if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                    PlaceholderExpansion expansion = PlaceholderAPIPlugin
-                            .getInstance()
-                            .getLocalExpansionManager()
-                            .getExpansion("playerstats");
-                    placeholderExpansionActive = expansion != null;
-                } else {
-                    placeholderExpansionActive = false;
-                }
-                metrics.addCustomChart(new SimplePie("using_placeholder_expansion", () -> placeholderExpansionActive ? "yes" : "no"));
-            }
-        }.runTaskLaterAsynchronously(this, 200);
+        final Metrics metrics = new Metrics(pluginInstance, 15923);
+        final boolean placeholderExpansionActive;
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            PlaceholderExpansion expansion = PlaceholderAPIPlugin
+                    .getInstance()
+                    .getLocalExpansionManager()
+                    .getExpansion("playerstats");
+            placeholderExpansionActive = expansion != null;
+        } else {
+            placeholderExpansionActive = false;
+        }
+        metrics.addCustomChart(new Metrics.SimplePie("using_placeholder_expansion", () -> placeholderExpansionActive ? "yes" : "no"));
+
+        CommandCounter counter = CommandCounter.getInstance();
+        metrics.addCustomChart(new Metrics.AdvancedPie("commands_used_the_last_30_minutes", counter::getCommandCounts));
     }
 
     @Override
